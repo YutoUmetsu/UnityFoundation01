@@ -5,7 +5,7 @@ public class Weapon : MonoBehaviour
 {
     public float speed = 10f;
     public float lifetime = 3f;
-
+    int score = 300;
     void Start()
     {
         Destroy(gameObject, lifetime);
@@ -17,13 +17,16 @@ public class Weapon : MonoBehaviour
     }
 
     // 当たった時の判定（武器側のColliderのIs TriggerがONの場合）
-    // Weapon.cs の判定部分を修正
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
-            // GameManagerに報告
-            GameManager.instance.RemoveEnemy(other.gameObject);
+            // シーン内のPlayerスクリプトを探してスコアを加算
+            Player player = Object.FindFirstObjectByType<Player>();
+            if (player != null)
+            {
+                player.AddScore(score);
+            }
 
             Destroy(other.gameObject);
             Destroy(gameObject);
